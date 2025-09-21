@@ -84,9 +84,13 @@ io.on('connection',(socket)=>{
         const filePath = path.join(__dirname, `${playerName}.jpg`);
         fs.writeFile(filePath, buffer, (err) => {});
 
-        /*
-        Implement image-to-text model here
-        */
+        lobby[socket.roomName].drawings[playerName]=dataURL; 
+        if(Object.keys(lobby[socket.roomName].drawings).length===2){
+            /*
+            Implement image-to-text model here
+            */
+           io.to(socket.roomName).emit("processDone",{"drawings":lobby[socket.roomName].drawings});
+        }
     });
     socket.on("disconnect", async () => {
         if(lobby)

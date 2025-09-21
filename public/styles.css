@@ -215,3 +215,17 @@ button:hover {
 #timerUI{
   margin-top: 3vh;
 }
+#drawingResults{
+    height: 100vh;
+    width: 500px;
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    flex-direction: column;
+}
+#player1Drawing{
+ margin-bottom: 20px;
+}
+#player2Drawing{
+ margin-top: 20px;
+}
