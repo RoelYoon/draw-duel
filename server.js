@@ -139,7 +139,7 @@ io.on('connection',(socket)=>{
         }
     });
     socket.on("disconnect", async () => {
-        if(lobby)
+        if(!(socket.roomName in lobby)){return;}
         try{
             const filePath = path.join(__dirname, `${lobby[socket.roomName].players[socket.id]}.jpg`);
             fs.unlink(filePath, (err) => {});
