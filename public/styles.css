@@ -223,9 +223,15 @@ button:hover {
     justify-content: center; 
     flex-direction: column;
 }
-#player1Drawing{
- margin-bottom: 20px;
+#player1Label{
+  margin-bottom: 3vh;
 }
-#player2Drawing{
- margin-top: 20px;
+#player1Drawing{
+ margin-bottom: 7vh;
+}
+#player2Label{
+ margin-bottom: 3vh;
+}
+#result{
+  margin-top: 7vh;
 }
