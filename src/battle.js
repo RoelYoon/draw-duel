@@ -73,38 +73,12 @@ socket.on("timerEnded", async ({isDisconnect}) => {
         }, 5000);
         
     }else{
-        timerLabel.innerHTML="<p>Battle has ended!<br>Waiting for result...</p>"
+        timerLabel.innerHTML="<p>Time has ended!<br>Waiting for result...</p>"
         const dataURL = signaturePad.toDataURL("image/jpeg");
         socket.emit("drawSubmit",dataURL);
     }
 });
 
-socket.on("processDone",({drawings})=>{
-    /*
-    const drawingsJSON = encodeURIComponent(JSON.stringify(drawings));
-    window.location.href=`/end.html?room=${encodeURIComponent(drawingsJSON)}`;
-    */
-   const players = Object.keys(drawings);
-   const endPage =
-`
-    <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Draw Duel</title>
-        <link rel="stylesheet" href="/styles.css"/>
-    </head>
-    <body>
-        <p style="text-align: center; margin-top:12vh">I'm not done yet!!!<br>But nice drawings :)</p>
-        <div id="drawingResults">
-            <label>Player 1: </label>
-            <img src="${drawings[players[0]]}" id="player1Drawing" alt="drawing 1" width="500">
-            <label>Player 2: </label>
-            <img src="${drawings[players[1]]}" id="player2Drawing" alt="drawing 2" width="500">
-        </div>  
-    </body>
-</html>`
-document.open();
-document.write(endPage);
-document.close();
+socket.on("processDone",({roomName})=>{
+    window.location.href=`/end.html?room=${encodeURIComponent(roomName)}`;
 });

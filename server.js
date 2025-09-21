@@ -4,6 +4,8 @@ const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 const fs = require('fs');
+const md = require("moondream");
+const hf = require("@huggingface/inference");
 require('dotenv').config();
 const bTime = 60;
 
@@ -16,8 +18,8 @@ let lobby = {};
 app.get('/api/lobby',(req,res)=>{
     const safeLobby = {};
     for (const [roomName, room] of Object.entries(lobby)) {
-        const { isPublic, password, players, drawings, inBattle, timeLeft } = room;
-        safeLobby[roomName] = { isPublic, password, players, drawings, inBattle, timeLeft };
+        const { isPublic, password, players, drawings, inBattle, result,timeLeft } = room;
+        safeLobby[roomName] = { isPublic, password, players, drawings, result,inBattle, timeLeft };
     }
     res.status(200).json(safeLobby);
 })
@@ -32,11 +34,49 @@ app.post('/api/lobby',(req,res)=>{
         players: {},
         drawings: {},
         inBattle: false,
+        result: "",
         timer: null,
         timeLeft: bTime
     };
     return res.status(200).json(lobby);
 })
+
+app.get('/api/drawings/:roomName',(req,res)=>{
+    const roomName = req.params["roomName"];
+    if(!(roomName in lobby)){
+        res.status(400).json({error: "No drawing data"});
+        return;
+    }
+    res.status(200).json(lobby[roomName].drawings);
+})
+
+app.get('/api/ai/:player1/:player2/:roomName',async (req,res)=>{
+    if(lobby[req.params["roomName"]].inBattle){
+        lobby[req.params["roomName"]].inBattle=false;
+        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${process.env.DEEP_TOKEN}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            "model": "x-ai/grok-4-fast:free",
+            "messages": [
+            {
+                "role": "user",
+                "content": `Who would win in a fight and why: ${req.params["player1"]} or ${req.params["player2"]}. Quickly explain in a single, brief sentence.`,
+            }
+            ]
+        })
+        });
+        const completion = await response.json()
+        lobby[req.params["roomName"]].result = completion.choices[0].message.content;
+        await res.status(200).json({"answer": completion.choices[0].message.content});
+    }else{
+        res.status(200).json({"answer": lobby[req.params["roomName"]].result});
+    }
+});
+
 /*
 app.post("/api/start-battle", (req, res) => {
     const {roomName,playerName} = req.body;
@@ -53,6 +93,9 @@ function dataURLToBuffer(dataURL) {
   const base64Data = parts[1];
   return Buffer.from(base64Data, 'base64');
 }
+
+const model = new md.vl({ apiKey: `${process.env.API_KEY}` });
+const client = new hf.InferenceClient(process.env.HF_TOKEN);
 io.on('connection',(socket)=>{
     socket.on('joinRoom',({roomName,playerName})=>{
         if (!(roomName in lobby) && roomName!==playerName){
@@ -82,14 +125,17 @@ io.on('connection',(socket)=>{
         const buffer = dataURLToBuffer(dataURL);
         const playerName = lobby[socket.roomName].players[socket.id];
         const filePath = path.join(__dirname, `${playerName}.jpg`);
-        fs.writeFile(filePath, buffer, (err) => {});
+        fs.writeFileSync(filePath, buffer, (err) => {});
+        const image = fs.readFileSync(filePath);
+        const aiResponse = await model.query({ image: image, question: "What is this a drawing of in 5 or less words?", stream: false });
 
-        lobby[socket.roomName].drawings[playerName]=dataURL; 
+        lobby[socket.roomName].drawings[playerName]={
+            image: dataURL,
+            caption: aiResponse["answer"]
+        }; 
+
         if(Object.keys(lobby[socket.roomName].drawings).length===2){
-            /*
-            Implement image-to-text model here
-            */
-           io.to(socket.roomName).emit("processDone",{"drawings":lobby[socket.roomName].drawings});
+            io.to(socket.roomName).emit("processDone",{"roomName":socket.roomName});
         }
     });
     socket.on("disconnect", async () => {
