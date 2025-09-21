@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Draw Duel</title>
+        <link rel="stylesheet" href="/styles.css"/>
+    </head>
+    <body>
+        <div id="cover"></div>
+
+        <p id="break" style="color:#4db0cb;">Purdue Hello World Hackathon 2025 <br> <br>
+            <a href="https://www.linkedin.com/in/roel-yoon-734716281/" id="profile" style="color:#4db0cb;">Roel Yoon</a>
+        </p>
+
+        <div class="container">
+            <h1 id="listHeader">Challengers</h1>
+            <div id="roomList">
+            <!-- Lobby space -->
+            </div>
+            <button id="addRoomBtn">Post Challenge</button>
+            <button id="refreshRoomsBtn">Refresh</button>
+        </div>
+
+        <div id="addRoomModal" class="modal">
+            <div class="modal-content">
+                <h2>Create Duel</h2>
+                <label>
+                Username:
+                <input type="text" id="roomNameInput" placeholder="Enter your name">
+                </label>
+                <label>
+                <input type="checkbox" id="isPublicCheckbox" checked> Public
+                </label>
+                <label id="passwordLabel" style="display:none;">
+                Password:
+                <input type="password" id="passwordInput">
+                </label>
+                <div class="modal-buttons">
+                    <button id="cancelRoomBtn">Cancel</button>
+                    <button id="createRoomBtn">Create</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="genModal" class="modal">
+            <div class="modal-content">
+                <label id="genInputLabel" style="display:inline;">Username:</label>
+                <input type="text" id="genInput" placeholder="">
+                <div class="modal-buttons">
+                    <button id="genCancelBtn">Cancel</button>
+                    <!-- Distinct buttons so dont have to replace eventlistener (not guaranteed) -->
+                    <button id="nameConfirmBtn" style="display:none;" >Confirm</button>
+                    <button id="passwordConfirmBtn" style="display:none;">Confirm</button>
+                </div>
+            </div>
+        </div>
+        <script src="socket.io/socket.io.js"></script>
+        <script src="signature_pad/dist/signature_pad.umd.min.js"></script>
+        <script src="animateColor.js"></script>
+        <script src="index.js"></script>
+    </body>
+</html>

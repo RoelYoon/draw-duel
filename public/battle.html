@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Draw Duel</title>
+        <link rel="stylesheet" href="/styles.css"/>
+    </head>
+    <body>
+        <div id="drawWidgetOuterWindow">
+            <h1 id="battleMessage" style="text-align:center;margin-bottom:3vh">Create Your Fighter</h1>
+            <canvas id="drawWidget" width="500" height="300"></canvas>
+            <input type="color" id="colorPicker" value="#ff0000">
+            <p><span id="colorValue" style="color:#ff0000;">#ff0000</span></p>
+            <div id="timerUI">
+                <h2 id="timerLabel">Waiting For Opponent...</h2>
+                <div id="timerDisplay">
+                </div>
+            </div>
+        </div>
+        <script src="socket.io/socket.io.js"></script>
+        <script src="signature_pad/dist/signature_pad.umd.min.js"></script>   
+        <script src="animateColor.js"></script>
+        <script src="dataURLToBlob.js"></script>
+        <script src="battle.js"></script>     
+    </body>
+</html>
