@@ -24,26 +24,6 @@ const roomList = document.getElementById('roomList');
 const addRoomBtn = document.getElementById('addRoomBtn');
 
 let roomCount = roomList.children.length;
-/*
-addRoomBtn.addEventListener('click', () => {
-  roomCount++;
-  const div = document.createElement('div');
-  div.className = 'room';
-  
-  const span = document.createElement('span');
-  span.textContent = `Room ${roomCount}`;
-  
-  const btn = document.createElement('button');
-  btn.className = 'joinBtn';
-  btn.textContent = 'Join';
-  btn.addEventListener('click', () => {
-    alert(`Joining Room ${roomCount}`);
-  });
-  
-  div.appendChild(span);
-  div.appendChild(btn);
-  roomList.appendChild(div);
-});*/
 
 const modal = document.getElementById('addRoomModal');
 const cancelBtn = document.getElementById('cancelRoomBtn');
