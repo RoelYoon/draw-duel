@@ -148,7 +148,7 @@ io.on('connection',(socket)=>{
         const filePath = path.join(__dirname, `${playerName}.jpg`);
         fs.writeFileSync(filePath, buffer, (err) => {});
         const image = fs.readFileSync(filePath);
-        const aiResponse = await model.query({ image: image, question: "What is this a drawing of in 10 or less words?", stream: false });
+        const aiResponse = await model.query({ image: image, question: "What is this a drawing of in 5 or less words? Don't be too literal", stream: false });
 
         lobby[socket.roomName].drawings[playerName]={
             image: dataURL,
@@ -175,5 +175,5 @@ io.on('connection',(socket)=>{
     });
 });
 
-//http.listen(3000,()=>{console.log("Listening at 3000")});
-http.listen(process.env.PORT, process.env.INTERNAL_IP, ()=>{console.log(`Listening at ${process.env.ADDRESS}`)});
+http.listen(3000,()=>{console.log("Listening at 3000")});
+//http.listen(process.env.PORT, process.env.INTERNAL_IP, ()=>{console.log(`Listening at ${process.env.ADDRESS}`)});
