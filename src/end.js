@@ -5,6 +5,7 @@ const p2Drawing = document.getElementById("player2Drawing");
 const p1Label = document.getElementById("player1Label");
 const p2Label = document.getElementById("player2Label");
 const result = document.getElementById("result");
+const returnBtn = document.getElementById("return");
 async function getDrawings(){
   try {
     response = await fetch(`/api/drawings/${roomName}`, {
@@ -25,7 +26,12 @@ async function getDrawings(){
     const answer = await response.json()
     console.log(answer);
     result.textContent=answer["answer"];
-
+    returnBtn.style.display = "block";
+    returnBtn.disabled = false;
+    returnBtn.addEventListener("click",()=>{
+      window.location.href=`/`;
+    })
+    
   } catch (err) {
     alert(err.message);
   }
