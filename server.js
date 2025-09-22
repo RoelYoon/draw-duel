@@ -73,7 +73,28 @@ app.get('/api/ai/:player1/:player2/:roomName',async (req,res)=>{
         lobby[req.params["roomName"]].result = completion.choices[0].message.content;
         await res.status(200).json({"answer": completion.choices[0].message.content});
     }else{
-        res.status(200).json({"answer": lobby[req.params["roomName"]].result});
+        async function waitUntil(conditionFunction, timeout = 10000, interval = 100) {
+            return new Promise((resolve, reject) => {
+                const checkCondition = () => {
+                if (conditionFunction()) {
+                    clearInterval(intervalId);
+                    resolve();
+                }
+                };
+                const intervalId = setInterval(checkCondition, interval);
+                setTimeout(() => {
+                clearInterval(intervalId);
+                reject(new Error("Timeout waiting for condition"));
+                }, timeout);
+            });
+        }
+        try {
+            await waitUntil(() => lobby[req.params["roomName"]].result !== "");
+            // Proceed with processing the data
+            res.status(200).json({"answer": lobby[req.params["roomName"]].result});
+        } catch (error) {
+            res.status(500).json({"answer":"Draw"}); //timeout
+        }
     }
 });
 
