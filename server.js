@@ -175,5 +175,5 @@ io.on('connection',(socket)=>{
     });
 });
 
-http.listen(3000,()=>{console.log("Listening at 3000")});
-//http.listen(process.env.PORT, process.env.INTERNAL_IP, ()=>{console.log(`Listening at ${process.env.ADDRESS}`)});
+//http.listen(3000,()=>{console.log("Listening at 3000")});
+http.listen(process.env.PORT, process.env.INTERNAL_IP, ()=>{console.log(`Listening at ${process.env.ADDRESS}`)});
