@@ -224,15 +224,15 @@ button:hover {
     flex-direction: column;
 }
 #player1Label{
-  margin-bottom: 3vh;
+  margin-bottom: 2vh;
 }
 #player1Drawing{
- margin-bottom: 5vh;
+ margin-bottom: 2vh;
+}
+#player2Drawing{
+ margin-top: 2vh;
 }
 #player2Label{
- margin-bottom: 3vh;
+ margin-top: 2vh;
 }
-#result{
-  margin-top: 3vh;
-  margin-bottom: 2vh
-}
+
