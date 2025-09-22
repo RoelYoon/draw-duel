@@ -168,6 +168,15 @@ async function loadRooms() {
         });
         roomList.appendChild(div);
     }
+    if(roomList.innerHTML === ""){
+      roomList.innerHTML = `
+      <div class="mouse_scroll">
+          <span class="m_scroll_arrows unu"></span>
+          <span class="m_scroll_arrows doi"></span>
+          <span class="m_scroll_arrows trei"></span>
+      </div>
+      `;
+    }
   }catch (err){
     alert(err.message);
   }
