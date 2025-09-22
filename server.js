@@ -98,7 +98,7 @@ const model = new md.vl({ apiKey: `${process.env.API_KEY}` });
 const client = new hf.InferenceClient(process.env.HF_TOKEN);
 io.on('connection',(socket)=>{
     socket.on('joinRoom',({roomName,playerName})=>{
-        if (!(roomName in lobby) && roomName!==playerName){
+        if (!(roomName in lobby)){
             socket.emit('joinError', 'Room does not exist');
             return;
         }
