@@ -38,7 +38,12 @@ app.post('/api/lobby',(req,res)=>{
         timer: null,
         timeLeft: bTime
     };
-    return res.status(200).json(lobby);
+    const safeLobby = {};
+    for (const [roomName, room] of Object.entries(lobby)) {
+        const { isPublic, password, players, drawings, inBattle, result,timeLeft } = room;
+        safeLobby[roomName] = { isPublic, password, players, drawings, result,inBattle, timeLeft };
+    }
+    return res.status(200).json(safeLobby);
 })
 
 app.get('/api/drawings/:roomName',(req,res)=>{
