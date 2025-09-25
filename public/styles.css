@@ -226,6 +226,7 @@ button:hover {
 }
 #player1Label{
   margin-bottom: 2vh;
+  color: #4db0cb;
 }
 #player1Drawing{
  margin-bottom: 2vh;
@@ -235,6 +236,7 @@ button:hover {
 }
 #player2Label{
  margin-top: 2vh;
+ color: #c57a40;
 }
 
 #return {
