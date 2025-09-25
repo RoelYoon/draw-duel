@@ -7,7 +7,10 @@ const playerName = params.get("player");
 joinRoom(roomName,playerName);
 function joinRoom(roomName, playerName){
     socket.emit('joinRoom',{roomName,playerName});
-    socket.on('joinError', (msg)=>alert(msg));
+    socket.on('joinError', (msg)=>{
+        alert(msg);
+        window.location.href=`/`;
+    });
 }
 
 const battleMessage = document.getElementById("battleMessage");

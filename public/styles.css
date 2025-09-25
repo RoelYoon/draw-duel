@@ -122,12 +122,13 @@ button:hover {
 /* Canvas styling */
 
 #drawWidgetOuterWindow{
-    height: 100vh;
+    min-height: 100vh;
     width: 500px;
     display: flex;
     align-items: center; 
     justify-content: center; 
     flex-direction: column;
+    padding: 2vh 0;
 }
 
 #drawWidget {
@@ -215,12 +216,13 @@ button:hover {
   margin-top: 3vh;
 }
 #drawingResults{
-    height: 100vh;
+    min-height: 100vh;
     width: 500px;
     display: flex;
     align-items: center; 
     justify-content: center; 
     flex-direction: column;
+    padding: 2vh 0;
 }
 #player1Label{
   margin-bottom: 2vh;

@@ -34,6 +34,7 @@ async function getDrawings(){
     
   } catch (err) {
     alert(err.message);
+    window.location.href=`/`;
   }
 }
 getDrawings();
