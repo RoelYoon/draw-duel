@@ -7,7 +7,7 @@ const fs = require('fs');
 const md = require("moondream");
 const hf = require("@huggingface/inference");
 require('dotenv').config();
-const bTime = 10;
+const bTime = 60;
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname,"./public")));
@@ -183,5 +183,5 @@ io.on('connection',(socket)=>{
     });
 });
 
-http.listen(3000,()=>{console.log("Listening at 3000")});
-//http.listen(process.env.PORT, process.env.INTERNAL_IP, ()=>{console.log(`Listening at ${process.env.ADDRESS}`)});
+//http.listen(3000,()=>{console.log("Listening at 3000")});
+http.listen(process.env.PORT, process.env.INTERNAL_IP, ()=>{console.log(`Listening at ${process.env.ADDRESS}`)});
