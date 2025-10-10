@@ -37,4 +37,5 @@ async function getDrawings(){
     window.location.href=`/`;
   }
 }
+result.textContent="Waiting for result...";
 getDrawings();

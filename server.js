@@ -7,7 +7,7 @@ const fs = require('fs');
 const md = require("moondream");
 const hf = require("@huggingface/inference");
 require('dotenv').config();
-const bTime = 60;
+const bTime = 10;
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname,"./public")));
@@ -65,7 +65,7 @@ app.get('/api/ai/:player1/:player2/:roomName',async (req,res)=>{
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            "model": "x-ai/grok-4-fast:free",
+            "model": "x-ai/grok-4-fast",
             "messages": [
             {
                 "role": "user",
@@ -75,8 +75,8 @@ app.get('/api/ai/:player1/:player2/:roomName',async (req,res)=>{
         })
         });
         const completion = await response.json()
-        lobby[req.params["roomName"]].result = completion.choices[0].message.content;
-        await res.status(200).json({"answer": completion.choices[0].message.content});
+        lobby[req.params["roomName"]].result = completion?.choices?.[0]?.message?.content ?? "Tie!";
+        await res.status(200).json({"answer": lobby[req.params["roomName"]].result});
     }else{
         async function waitUntil(conditionFunction, timeout = 10000, interval = 100) {
             return new Promise((resolve, reject) => {
@@ -121,7 +121,6 @@ function dataURLToBuffer(dataURL) {
 }
 
 const model = new md.vl({ apiKey: `${process.env.API_KEY}` });
-const client = new hf.InferenceClient(process.env.HF_TOKEN);
 io.on('connection',(socket)=>{
     socket.on('joinRoom',({roomName,playerName})=>{
         if (!(roomName in lobby) || lobby[roomName].inBattle){
@@ -136,6 +135,10 @@ io.on('connection',(socket)=>{
             lobby[roomName].inBattle=true;
             io.to(roomName).emit("battleStart",{timeLeft:bTime});
             lobby[roomName].timer = setInterval(() => {
+                if (!lobby[roomName]) {
+                    clearInterval(lobby[roomName]?.timer);
+                    return;
+                }
                 lobby[roomName].timeLeft--;
                 // broadcast remaining time
                 io.to(roomName).emit("timerUpdate", { timeLeft: lobby[roomName].timeLeft });
@@ -153,7 +156,7 @@ io.on('connection',(socket)=>{
         const filePath = path.join(__dirname, `${playerName}.jpg`);
         fs.writeFileSync(filePath, buffer, (err) => {});
         const image = fs.readFileSync(filePath);
-        const aiResponse = await model.query({ image: image, question: "What is this a drawing of in 5 or less words? Don't be too literal", stream: false });
+        const aiResponse = await model.query({ image: image, question: "What is this a drawing of in 5 or less words?", stream: false });
 
         lobby[socket.roomName].drawings[playerName]={
             image: dataURL,
@@ -180,5 +183,5 @@ io.on('connection',(socket)=>{
     });
 });
 
-//http.listen(3000,()=>{console.log("Listening at 3000")});
-http.listen(process.env.PORT, process.env.INTERNAL_IP, ()=>{console.log(`Listening at ${process.env.ADDRESS}`)});
+http.listen(3000,()=>{console.log("Listening at 3000")});
+//http.listen(process.env.PORT, process.env.INTERNAL_IP, ()=>{console.log(`Listening at ${process.env.ADDRESS}`)});

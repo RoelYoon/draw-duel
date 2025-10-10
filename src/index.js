@@ -61,6 +61,9 @@ createBtn.addEventListener('click', async () => {
   if (!name) {
     alert('Please enter your name.');
     return;
+  }else if(name.includes('/')){
+    alert("No '/' allowed in username")
+    return;
   }
 
   if (!isPublic && !password) {
@@ -138,6 +141,9 @@ async function loadRooms() {
                         return;
                     }else if(inputName===name){
                         alert("Room name exists in lobby");
+                        return;
+                    }else if(inputName.includes('/')){
+                        alert("No '/' allowed in username");
                         return;
                     }
                     genModal.style.display = "none";
